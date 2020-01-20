@@ -115,16 +115,31 @@ export default {
               authority: ['admin'],
             },
             {
+              path: '/sys',
+              name: '系统管理',
+              icon: 'setting',
+              routes: [
+                {
+                  name: '菜单管理',
+                  path: 'menu',
+                  icon: 'menu',
+                  component: './sys/menu'
+                }
+              ]
+            },
+
+
+            {
               component: './404',
             },
           ],
         },
+        
         {
           component: './404',
         },
       ],
     },
-
     {
       component: './404',
     },

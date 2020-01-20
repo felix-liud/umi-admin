@@ -2,7 +2,6 @@ import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
 import { queryCurrent, query as queryUsers } from '@/services/user';
-import { getRouter } from '@/pages/sys/menu/service';
 
 export interface CurrentUser {
   avatar?: string;
@@ -18,21 +17,9 @@ export interface CurrentUser {
   unreadCount?: number;
 }
 
-export interface MenuDataItem {
-  authority?: string[] | string;
-  children?: MenuDataItem[];
-  hideChildrenInMenu?: boolean;
-  hideInMenu?: boolean;
-  icon?: string;
-  locale?: string;
-  name?: string;
-  path: string;
-  [key: string]: any;
-}
 
 export interface UserModelState {
-  currentUser?: CurrentUser;
-  menu?: MenuDataItem[],
+  currentUser: CurrentUser;
 }
 
 
@@ -42,12 +29,10 @@ export interface UserModelType {
   effects: {
     fetch: Effect;
     fetchCurrent: Effect;
-    fetchMenu: Effect;
   };
   reducers: {
     saveCurrentUser: Reducer<UserModelState>;
     changeNotifyCount: Reducer<UserModelState>;
-    saveMenu: Reducer<UserModelState>;
   };
 }
 
@@ -55,7 +40,6 @@ const UserModel: UserModelType = {
   namespace: 'user',
   state: {
     currentUser: {},
-    menu: [],
   },
 
   effects: {
@@ -73,13 +57,6 @@ const UserModel: UserModelType = {
         payload: response.data,
       });
     },
-    *fetchMenu(_, { call, put }) {
-      const response = yield call(getRouter);
-      yield put({
-        type: 'saveMenu',
-        payload: response.data
-      })
-    },
   },
 
   reducers: {
@@ -92,7 +69,6 @@ const UserModel: UserModelType = {
     changeNotifyCount(
       state = {
         currentUser: {},
-        menu:[]
       },
       action,
     ) {
@@ -105,12 +81,6 @@ const UserModel: UserModelType = {
         },
       };
     },
-    saveMenu(state, action) {
-      return {
-        ...state,
-        menu: action.payload
-      }
-    }
   },
 };
 

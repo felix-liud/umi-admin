@@ -8,17 +8,14 @@ import { ConnectState } from '@/models/connect';
 import Authorized from '@/utils/Authorized';
 import { getAuthorityFromRouter } from '@/utils/utils';
 import ProLayout, { BasicLayoutProps as ProLayoutProps, MenuDataItem, Settings } from '@ant-design/pro-layout';
-import { Button, Result } from 'antd';
+import { Button, Result, Card } from 'antd';
 import { connect } from 'dva';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dispatch } from 'redux';
 import { Link } from 'umi';
 
 import logo from '../assets/logo.svg';
-
-
-
-
+import { getRouter } from '@/services/login';
 
 const noMatch = (
   <Result
@@ -51,11 +48,12 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
  * use Authorized check all menu item
  */
 
-const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-  menuList.map(item => {
+const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
+  return menuList.map(item => {
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
+};
 
 const footerRender: BasicLayoutProps['footerRender'] = () => {
 
@@ -79,7 +77,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     dispatch,
     children,
     settings,
-    menuData,
     location = {
       pathname: '/',
     },
@@ -87,7 +84,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   /**
    * constructor
    */
-
+  const [menuData, setMenuData] = useState([]);
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -97,6 +94,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       dispatch({
         type: 'user/fetchMenu',
       })
+      getRouter().then(res => {
+        setMenuData(res.data);
+      });
     }
   }, []);
   /**
@@ -154,18 +154,20 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       {...settings}
     >
       <Authorized authority={authorized!.authority} noMatch={noMatch}>
+        <Card hoverable>
         {children}
+
+        </Card>
       </Authorized>
     </ProLayout>
   );
 };
 
 export default connect((store: ConnectState) => {
-  const { global, settings, user: { menu: menuData } } = store;
+  const { global, settings } = store;
   return {
     collapsed: global.collapsed,
     settings,
-    menuData
   }
 })(BasicLayout);
 /* 

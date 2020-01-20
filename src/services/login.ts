@@ -19,6 +19,7 @@ export async function getFakeCaptcha(mobile: string) {
   return request(`/login/captcha?mobile=${mobile}`);
 }
 
+// 获取路由菜单
 export async function getRouter() {
   return request(`/sys/menu/router/antd`);
 }
