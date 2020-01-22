@@ -1,6 +1,6 @@
 import { ConnectProps, ConnectState } from '@/models/connect';
-import { connect } from 'dva';
 import React from 'react';
+import { connect } from 'dva';
 
 import HeaderSearch from '../HeaderSearch';
 import Avatar from './AvatarDropdown';

@@ -120,6 +120,7 @@ request.interceptors.response.use(async (response: Response) => {
   const res = await response.clone().json();
   const { code } = res;
   if (response.status === 200 && code !== 2000) {
+    notification.destroy();
     notification.error({ description: codeMaps[res.code], message: '请求失败'});
   }
   return response;

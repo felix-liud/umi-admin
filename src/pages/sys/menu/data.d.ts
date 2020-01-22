@@ -12,4 +12,5 @@ export interface SysMenu {
   type: number;
   parentId?: string;
   hide?: number;
+  icon?: string;
 }
