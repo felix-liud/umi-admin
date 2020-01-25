@@ -124,6 +124,12 @@ export default {
                   path: 'menu',
                   icon: 'menu',
                   component: './sys/menu'
+                },
+                {
+                  name: '字典管理',
+                  path: 'dict',
+                  icon: 'gold',
+                  component: './sys/dict'
                 }
               ]
             },

@@ -104,8 +104,9 @@ const request = extend({
 
 // 请求前的拦截.
 request.interceptors.request.use((url: string, options: RequestOptionsInit) => {
+  
   if (options.method === 'get') {
-    options.data = handleParams(options.params as object);
+    options.params = handleParams(options.params as object);
   }
   return (
     {
